@@ -222,8 +222,10 @@ class FontFA5ProBrands( FontFA5 ):  # Font Awesome version 5 Pro - Brand style
 class FontMD( Font ):               # Material Design
     font_name = 'Material Design'
     font_abbr = 'MD'
-    font_data = 'https://raw.githubusercontent.com/google/material-design-icons/master/iconfont/codepoints'
-    ttfs = [[ font_abbr, 'MaterialIcons-Regular.ttf', 'https://github.com/google/material-design-icons/blob/master/iconfont/MaterialIcons-Regular.ttf' ]]
+    # font_data = 'https://raw.githubusercontent.com/google/material-design-icons/master/iconfont/codepoints'
+    # https://github.com/google/material-design-icons/blob/master/iconfont/MaterialIcons-Regular.ttf
+    font_data = 'https://raw.githubusercontent.com/google/material-design-icons/master/font/MaterialIcons-Regular.codepoints'
+    ttfs = [[ font_abbr, 'MaterialIcons-Regular.ttf', 'https://github.com/google/material-design-icons/blob/master/font/MaterialIcons-Regular.ttf' ]]
 
     @classmethod
     def get_icons( cls, input_data ):
@@ -232,10 +234,15 @@ class FontMD( Font ):               # Material Design
         if lines:
             font_min = 'ffff'
             font_max = '0'
+            number_limit = int('ffff', 16)
             icons = []
             for line in lines :
                 words = str.split(line)
                 if words and len( words ) >= 2:
+                    word_int = int(words[1], 16)
+                    if word_int > number_limit:
+                        print(words, 'Jump')
+                        continue
                     if words[ 1 ] < font_min:
                         font_min = words[ 1 ]
                     if words[ 1 ] >= font_max:
@@ -244,6 +251,7 @@ class FontMD( Font ):               # Material Design
             icons_data.update({ 'font_min' : font_min,
                                 'font_max' : font_max,
                                 'icons' : icons })
+            print(font_min, font_max)
         return icons_data
 
 
@@ -524,8 +532,10 @@ class LanguageCSharp( Language ):
 
 
 # Main
-fonts = [ FontFA4, FontFA5, FontFA5Brands, FontFA5Pro, FontFA5ProBrands, FontFK, FontKI, FontFAD ] # FontMD - Issue #19
-languages = [ LanguageC, LanguageCSharp ]
+# fonts = [ FontFA4, FontFA5, FontFA5Brands, FontFA5Pro, FontFA5ProBrands, FontFK, FontKI, FontFAD ] # FontMD - Issue #19
+fonts = [ FontMD ] # FontMD - Issue #19
+# languages = [ LanguageC, LanguageCSharp ]
+languages = [ LanguageC ]
 ttf2headerC = False # convert ttf files to C and C++ headers
 
 intermediates = []
